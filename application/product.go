@@ -47,10 +47,14 @@ const (
 )
 
 type Product struct {
-	ID     string `valid:"uuidv4"`
-	Name   string `valid:"required"`
+	ID     string  `valid:"uuidv4"`
+	Name   string  `valid:"required"`
 	Price  float64 `valid:"float,optional"`
-	Status string `valid:"required"`
+	Status string  `valid:"required"`
+}
+
+func NewProductService(p ProductPersistenceInterface) *ProductService {
+	return &ProductService{Persistence: p}
 }
 
 func NewProduct() *Product {
@@ -65,7 +69,7 @@ func (p *Product) IsValid() (bool, error) {
 		p.Status = DISABLED
 	}
 
-	if (p.Status != ENABLED && p.Status != DISABLED) {
+	if p.Status != ENABLED && p.Status != DISABLED {
 		return false, errors.New("the status must be enabled or disabled")
 	}
 
